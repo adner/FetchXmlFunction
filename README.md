@@ -40,7 +40,38 @@ The function returns an array of knowledge base results in the following format:
 
 ## Configuration
 
-The function uses dependency injection for the `IOrganizationService` client. Configure your Dataverse connection in `appsettings.json` or Azure Function application settings.
+### Dataverse Settings
+
+The function requires the following configuration settings for connecting to your Dataverse environment. Add these to your `appsettings.json` or Azure Function application settings:
+
+```json
+{
+  "Dataverse": {
+    "Url": "https://your-org.crm.dynamics.com/",
+    "ClientId": "your-azure-ad-app-client-id",
+    "Secret": "your-azure-ad-app-client-secret"
+  }
+}
+```
+
+**Required Settings:**
+- **Url**: Your Dataverse environment URL
+- **ClientId**: The Application (client) ID from your Azure AD app registration
+- **Secret**: The client secret for your Azure AD app
+
+**Note**: For local development, use `appsettings.local.json` (which is git-ignored). For Azure deployment, configure these as Application Settings in the Azure Portal.
+
+### CORS Configuration
+
+When deploying to Azure, you must configure CORS to allow Copilot Studio to call your function:
+
+1. Navigate to your Azure Function in the Azure Portal
+2. Go to **Settings** > **CORS**
+3. Add the following allowed origins:
+   - `https://copilotstudio.microsoft.com`
+   - Any additional origins where your Copilot Studio instances are hosted
+
+Without proper CORS configuration, Copilot Studio will not be able to call your function.
 
 ## Learn More
 
